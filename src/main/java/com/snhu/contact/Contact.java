@@ -1,16 +1,18 @@
 package com.snhu.contact;
 
 public class Contact {
-    private String id; // cannot be null or updatable
+    final private String id; // cannot be null or updatable
     private String firstName; // cannot be null
     private String lastName; // cannot be null
     private String phoneNumber; // cannot be null
     private String address; // cannot be null
 
     public Contact(String id, String firstName, String lastName, String phoneNumber, String address) {
-        if(id == null || firstName == null || lastName == null || phoneNumber == null || address == null) {
-            throw new NullPointerException("firstName and lastName and phoneNumber are null");
-        }
+        checkIfPhraseIsNullOrEmpty(id);
+        checkIfPhraseIsNullOrEmpty(firstName);
+        checkIfPhraseIsNullOrEmpty(lastName);
+        checkIfPhraseIsNullOrEmpty(phoneNumber);
+        checkIfPhraseIsNullOrEmpty(address);
 
         if (phoneNumber.length() != 10) {
             throw new IllegalArgumentException("phoneNumber is too long or too short");
@@ -30,7 +32,7 @@ public class Contact {
     }
 
     public Contact(Contact contact, String id) {
-        checkIfPhraseIsNull(id);
+        checkIfPhraseIsNullOrEmpty(id);
         checkLengthOfPhrase(id, 10);
         checkIfAllDigits(id);
         this.id = id;
@@ -62,25 +64,25 @@ public class Contact {
     }
 
     public void setAddress(String address) {
-        checkIfPhraseIsNull(address);
+        checkIfPhraseIsNullOrEmpty(address);
         checkLengthOfPhrase(address, 30);
         this.address = address;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        checkIfPhraseIsNull(phoneNumber);
+        checkIfPhraseIsNullOrEmpty(phoneNumber);
         checkLengthOfPhrase(phoneNumber, 30);
         this.phoneNumber = phoneNumber;
     }
 
     public void setLastName(String lastName) {
-        checkIfPhraseIsNull(lastName);
+        checkIfPhraseIsNullOrEmpty(lastName);
         checkLengthOfPhrase(lastName, 30);
         this.lastName = lastName;
     }
 
     public void setFirstName(String firstName) {
-        checkIfPhraseIsNull(firstName);
+        checkIfPhraseIsNullOrEmpty(firstName);
         checkLengthOfPhrase(firstName, 30);
         this.firstName = firstName;
     }
@@ -97,9 +99,9 @@ public class Contact {
         }
     }
 
-    private void checkIfPhraseIsNull(String phrase) {
-        if(phrase == null) {
-            throw new NullPointerException("phone number is null");
+    private void checkIfPhraseIsNullOrEmpty(String phrase) {
+        if(phrase == null || phrase.isEmpty()) {
+            throw new NullPointerException("phrase is null or empty");
         }
     }
 }

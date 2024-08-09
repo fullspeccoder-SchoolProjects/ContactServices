@@ -7,11 +7,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ContactService {
     List<Contact> contacts;
     public ContactService() {
-        contacts = new ArrayList<Contact>();
+        contacts = new ArrayList<>();
     }
 
-    public List<Contact> getContacts() {
-        return contacts;
+    public Contact getContact(String id) {
+        if(id == null || id.isEmpty()) {
+            throw new NullPointerException("Contact id cannot be null or empty");
+        }
+        for(Contact c : contacts) {
+            if(c.getId().equals(id)) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException("Contact with id " + id + " not found");
     }
 
     void addContact(String id, String firstName, String lastName, String phoneNumber, String address) {
@@ -39,7 +47,7 @@ public class ContactService {
                 throw new IllegalArgumentException("Cannot add contact because id exists in another contact");
             }
         });
-        Contact newContact = new Contact(id, contact.getFirstName(), contact.getLastName(), contact.getPhoneNumber(), contact.getAddress());
+        Contact newContact = new Contact(contact, id);
         contacts.add(newContact);
     }
 
@@ -59,17 +67,17 @@ public class ContactService {
         if(id == null) {
             throw new NullPointerException("ID is null");
         }
-        AtomicBoolean updatedContact = new AtomicBoolean(false);
+        AtomicBoolean hasUpdatedContact = new AtomicBoolean(false);
         contacts.forEach((contact) -> {
             if(contact.getId().equals(id)) {
                 contact.setFirstName(firstName);
                 contact.setLastName(lastName);
                 contact.setPhoneNumber(phoneNumber);
                 contact.setAddress(address);
-                updatedContact.set(true);
+                hasUpdatedContact.set(true);
             }
         });
-        if(!updatedContact.get()) {
+        if(!hasUpdatedContact.get()) {
             throw new IllegalArgumentException("ID does not exist");
         }
     }
